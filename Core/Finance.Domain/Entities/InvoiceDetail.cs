@@ -15,6 +15,9 @@ namespace Finance.Domain.Entities
         public int StockId { get; set; }
         public Stock Stock { get; set; }
 
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal UnitPrice { get; set; }
+
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }

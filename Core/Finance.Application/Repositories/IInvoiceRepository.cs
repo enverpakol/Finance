@@ -5,6 +5,6 @@ namespace Finance.Application.Repositories
     public interface IInvoiceRepository : IRepository<Invoice>
     {
 
-
+        Task<string> GetInvoiceNo();
     }
 }

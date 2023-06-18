@@ -20,5 +20,9 @@ namespace Finance.Domain.Entities.Identity
 
         
         public ICollection<Invoice> Invoices { get; set; }
+
+
+
+        public string Name => $"{FirstName} {LastName}";
     }
 }

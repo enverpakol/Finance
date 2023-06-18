@@ -52,20 +52,23 @@ namespace Finance.Application.Mapper
                    StockId = g.StockId,
                    Price = g.Price,
                    Quantity = g.Quantity,
+                   UnitPrice = g.UnitPrice,
                }
                ).ToList()));
 
 
             CreateMap<Invoice, InvoiceDto>()
-            .ForMember(x => x.Details, opt => opt.MapFrom(x => x.InvoiceDetails.Select(g => new InvoiceDetailDto
-            {
-                Price = g.Price,
-                Quantity = g.Quantity,
-                StockId=g.StockId,
-                StockName=g.Stock.Name??"",
-                Id=g.Id,
-            }).ToList()));
-             
+                .ForMember(x => x.ClientName, g => g.MapFrom(x => x.Client.Name))
+                .ForMember(x => x.Details, opt => opt.MapFrom(x => x.InvoiceDetails.Select(g => new InvoiceDetailDto
+                {
+                    Price = g.Price,
+                    Quantity = g.Quantity,
+                    StockId = g.StockId,
+                    StockName = g.Stock.Name ?? "",
+                    UnitPrice = g.UnitPrice,
+                    Id = g.Id,
+                }).ToList()));
+
         }
     }
 }

@@ -10,6 +10,8 @@ namespace Finance.Application.Dtos
         public int StockId{ get; set; }
         public string StockName { get; set; }
 
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal UnitPrice { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }

@@ -48,7 +48,7 @@ namespace Finance.Persistence.Contexts
             base.OnModelCreating(builder);
 
             builder.Entity<Invoice>()
-             .HasOne(d => d.AppUser)
+             .HasOne(d => d.Client)
              .WithMany(d => d.Invoices)
              .HasForeignKey(d => d.ClientId)
              .IsRequired(true)
