@@ -1,1 +1,1 @@
-# Dinamik
+# Finance v1
