@@ -40,6 +40,20 @@ namespace Finance.Application.Mapper
             CreateMap<Stock, StockDto>().ReverseMap();
 
 
+            CreateMap<StockTransaction, StockTransactionDto>();
+
+            CreateMap<StockTransactionDto, StockTransaction>()
+                .ForMember(x => x.Stock, options => options.Ignore())
+                .ForMember(x => x.Invoice, options => options.Ignore());
+
+            CreateMap<PaymentTransaction, PaymentTransactionDto>();
+
+            CreateMap<PaymentTransactionDto, PaymentTransaction>()
+                .ForMember(x => x.Client, options => options.Ignore())
+                .ForMember(x => x.Invoice, options => options.Ignore());
+
+
+
             CreateMap<Invoice, InvoiceDto>().ReverseMap();
             CreateMap<InvoiceDetail, InvoiceDetailDto>().ReverseMap();
 

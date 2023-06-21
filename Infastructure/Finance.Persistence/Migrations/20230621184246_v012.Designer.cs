@@ -3,6 +3,7 @@ using System;
 using Finance.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Finance.Persistence.Migrations
 {
     [DbContext(typeof(AppData))]
-    partial class AppDataModelSnapshot : ModelSnapshot
+    [Migration("20230621184246_v012")]
+    partial class v012
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,9 +169,6 @@ namespace Finance.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("InvoicePaymentEnum")
-                        .HasColumnType("int");
-
                     b.Property<string>("No")
                         .HasColumnType("longtext");
 
@@ -221,36 +221,6 @@ namespace Finance.Persistence.Migrations
                     b.ToTable("InvoiceDetails");
                 });
 
-            modelBuilder.Entity("Finance.Domain.Entities.PaymentTransaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("InvoiceId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("InvoiceId");
-
-                    b.ToTable("PaymentTransaction");
-                });
-
             modelBuilder.Entity("Finance.Domain.Entities.Stock", b =>
                 {
                     b.Property<int>("Id")
@@ -291,14 +261,17 @@ namespace Finance.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18, 2)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int?>("InvoiceId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<int?>("IvoiceId")
+                        .HasColumnType("int");
 
                     b.Property<int>("StockId")
                         .HasColumnType("int");
@@ -451,23 +424,6 @@ namespace Finance.Persistence.Migrations
                     b.Navigation("Invoice");
 
                     b.Navigation("Stock");
-                });
-
-            modelBuilder.Entity("Finance.Domain.Entities.PaymentTransaction", b =>
-                {
-                    b.HasOne("Finance.Domain.Entities.Identity.AppUser", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Finance.Domain.Entities.Invoice", "Invoice")
-                        .WithMany()
-                        .HasForeignKey("InvoiceId");
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Invoice");
                 });
 
             modelBuilder.Entity("Finance.Domain.Entities.Stock", b =>

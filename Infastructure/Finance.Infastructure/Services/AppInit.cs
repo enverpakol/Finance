@@ -69,12 +69,11 @@ namespace Finance.Infastructure.Services
                 };
                 var result = _userManager.CreateAsync(user, "123456").Result;
 
-               
 
             }
             else
             {
-                if (_userManager.IsInRoleAsync(baseUser, "admin").Result==false)
+                if (_userManager.IsInRoleAsync(baseUser, "admin").Result == false)
                 {
                     var roleResult = _userManager.AddToRoleAsync(baseUser, "admin").Result;
                 }

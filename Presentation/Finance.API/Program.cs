@@ -8,8 +8,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
-
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +21,11 @@ builder.Services.AddInfastructureServices();
 builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
     .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<UserDtoValidator>())
     .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true)
-    ;
+      .AddJsonOptions(opts =>
+      {
+          var enumConverter = new JsonStringEnumConverter();
+          opts.JsonSerializerOptions.Converters.Add(enumConverter);
+      });
 
 
 builder.Services.AddEndpointsApiExplorer();

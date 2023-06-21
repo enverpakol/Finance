@@ -1,5 +1,6 @@
 ﻿using Finance.Application.Repositories;
 using Finance.Domain.Entities;
+using Finance.Domain.Entities.Enums;
 using Finance.Domain.Entities.Identity;
 using Finance.Persistence.Contexts;
 using Microsoft.AspNetCore.Identity;
@@ -13,10 +14,14 @@ namespace Finance.Persistence.Repositories
 
         private readonly IAppUserRepository _userRepository;
         private readonly IStockRepository _stockRepository;
-        public InvoiceRepository(AppData context, IAppUserRepository userRepository, IStockRepository stockRepository) : base(context)
+        private readonly IStockTransactionRepository _stockTransactionRepository;
+        private readonly IPaymentTransactionRepository _paymentTransactionRepository;
+        public InvoiceRepository(AppData context, IAppUserRepository userRepository, IStockRepository stockRepository, IStockTransactionRepository stockTransactionRepository, IPaymentTransactionRepository paymentTransactionRepository) : base(context)
         {
             _userRepository = userRepository;
             _stockRepository = stockRepository;
+            _stockTransactionRepository = stockTransactionRepository;
+            _paymentTransactionRepository = paymentTransactionRepository;
         }
 
 
@@ -35,13 +40,34 @@ namespace Finance.Persistence.Repositories
 
             item.TotalAmount = item.InvoiceDetails.Sum(x => x.Price);
 
+            var result = await base.CreateAsync(item);
 
-            return await base.CreateAsync(item);
+            foreach (var detail in item.InvoiceDetails)
+            {
+                _ = await _stockTransactionRepository.CreateAsync(new()
+                {
+                    StockId = detail.StockId,
+                    Quantity = detail.Quantity * -1,
+                    InvoiceId = item.Id,
+                });
+            }
+
+            if (item.InvoicePaymentEnum == InvoicePaymentEnum.BALANCE)
+            {
+                _ = await _paymentTransactionRepository.CreateAsync(new()
+                {
+                    ClientId = item.ClientId,
+                    Price = item.TotalAmount * -1,
+                    InvoiceId = item.Id,
+                });
+            }
+
+            return result;
         }
 
         public async Task<string> GetInvoiceNo()
         {
-            var lastInvoice=await Table.OrderByDescending(x=>x.Id).FirstOrDefaultAsync();
+            var lastInvoice = await Table.OrderByDescending(x => x.Id).FirstOrDefaultAsync();
             if (lastInvoice != null)
             {
                 int.TryParse(lastInvoice.No, out int lastInvoiceNo);
@@ -55,7 +81,7 @@ namespace Finance.Persistence.Repositories
         public override Task<Invoice> GetItemAsync(int id)
         {
             return Table
-                .Include(x=>x.Client)
+                .Include(x => x.Client)
                 .Include(x => x.InvoiceDetails).ThenInclude(x => x.Stock)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }

@@ -21,7 +21,7 @@ namespace Finance.Application.Repositories
         Task<AppUser> CreateClientUser(ClientDto model);
         Task<bool> EditClientUser(ClientDto model);
         Task<PagerUtils<AppUser, ClientDto>> GetClientUserList(ListRequestDto model);
-
+        Task<bool> SetClientPaymentBalance(int id, decimal quantity);
 
     }
 }

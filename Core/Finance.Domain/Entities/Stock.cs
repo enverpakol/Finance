@@ -21,5 +21,6 @@ namespace Finance.Domain.Entities
 
 
         public ICollection<InvoiceDetail> InvoiceDetails { get; set; }
+        public ICollection<StockTransaction> StockTransactions { get; set; }
     }
 }

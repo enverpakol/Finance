@@ -177,10 +177,21 @@ namespace Finance.Persistence.Repositories
             var activeUser = await GetActiveUser();
             var adminIds = _userManager.GetUsersInRoleAsync("client").GetOnlyIdList();
             var query = Context.AppUsers
-                        .Where(x => adminIds.Contains(x.Id)&&x.CompanyId==activeUser.CompanyId)
+                        .Where(x => adminIds.Contains(x.Id) && x.CompanyId == activeUser.CompanyId)
                         .AsNoTracking();
 
             return await PagerUtils<AppUser, ClientDto>.SetAsync(query, _mapper, model.PageIndex, model.PageSize);
+        }
+
+        public async Task<bool> SetClientPaymentBalance(int id, decimal quantity)
+        {
+            var item = await GetItemAsync(id);
+            if (item == null)
+                throw new NotFoundException("");
+
+            item.BalanceDebt += quantity;
+
+            return await EditAsync(item);
         }
     }
 }

@@ -21,6 +21,8 @@ namespace Finance.Persistence.Contexts
 
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
+        public DbSet<StockTransaction> StockTransactions { get; set; }
+        public DbSet<PaymentTransaction> PaymentTransaction { get; set; }
 
 
 

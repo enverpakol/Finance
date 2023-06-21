@@ -2,6 +2,7 @@
 using Finance.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
+using Finance.Domain.Entities.Enums;
 
 namespace Finance.Application.Dtos
 {
@@ -14,6 +15,7 @@ namespace Finance.Application.Dtos
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal TotalAmount { get; set; }
+        public InvoicePaymentEnum InvoicePaymentEnum { get; set; }
         public ICollection<InvoiceDetailDto> Details { get; set; }
     }
 }
