@@ -17,7 +17,7 @@ namespace Finance.Infastructure.Filters
                     .ToList();
 
 
-                var response = ResponseDto<NoContentDto>.Fail(HttpStatusCode.BadRequest, value);
+                var response = ResponseDto<NoContentDto>.Fail(HttpStatusCode.BadRequest, value,-1);
                 context.Result = new ObjectResult(response)
                 {
                     StatusCode = (int)response.StatusCode
