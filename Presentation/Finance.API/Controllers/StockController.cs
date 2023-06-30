@@ -31,9 +31,10 @@ namespace Finance.API.Controllers
         [HttpPost]
         public async Task<IActionResult> List(ListRequestDto p)
         {
-            var query = _repo.GetList().ToDynamicWhereAndOrder(p);
+            var list = await _repo.GetListFromCacheAsync();
+            var filteredList = list.ToDynamicWhereAndOrder(p);
 
-            var test = await PagerUtils<Stock, StockDto>.SetAsync(query, _mapper, p.PageIndex, p.PageSize);
+            var test = PagerUtils<Stock, StockDto>.SetAsync(filteredList, _mapper, p.PageIndex, p.PageSize);
             return CreateActionResult(PagerResponseDto<StockDto>.Success(HttpStatusCode.OK, test.Items, test.ItemsInfo, 1));
         }
 

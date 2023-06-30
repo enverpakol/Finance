@@ -5,6 +5,7 @@ using Finance.Application.Validators;
 using Finance.Infastructure;
 using Finance.Infastructure.Filters;
 using Finance.Persistence;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -21,7 +22,6 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfastructureServices();
 
 builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
-    .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<UserDtoValidator>())
     .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true)
       .AddJsonOptions(opts =>
       {
@@ -30,12 +30,16 @@ builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>
       });
 
 
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<UserDtoValidator>();
+
+
 builder.Services.AddStackExchangeRedisCache(action =>
 {
-    action.Configuration = "localhost:6379";
+    action.Configuration = builder.Configuration["ConnectionStrings:Redis"];
 });
 
-builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost:6379"));
+builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(builder.Configuration["ConnectionStrings:Redis"]));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -88,7 +92,7 @@ app.MapControllers();
 using (var serviceScope = app.Services.CreateScope())
 {
     var context = serviceScope.ServiceProvider.GetService<IAppInit>();
-    context.InitAsync();
+    _ = context.InitAsync();
 
 
 }
