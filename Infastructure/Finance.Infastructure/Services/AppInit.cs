@@ -2,6 +2,9 @@
 using Finance.Domain.Entities.Identity;
 using Finance.Persistence.Contexts;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
+using System.Configuration;
 
 namespace Finance.Infastructure.Services
 {
@@ -11,16 +14,21 @@ namespace Finance.Infastructure.Services
         private readonly RoleManager<AppRole> _roleManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IConnectionMultiplexer _redisConnection;
+        private readonly IDistributedCache _cache;
 
-        public AppInit(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, AppData context, SignInManager<AppUser> signInManager)
+
+        public AppInit(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, AppData context, SignInManager<AppUser> signInManager, IConnectionMultiplexer redisConnection, IDistributedCache cache)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
             _signInManager = signInManager;
+            _redisConnection = redisConnection;
+            _cache = cache;
         }
 
-        public void Init()
+        public async Task InitAsync()
         {
             //_context.Database.EnsureCreated();
 #if (!DEBUG)
@@ -77,6 +85,16 @@ namespace Finance.Infastructure.Services
                 {
                     var roleResult = _userManager.AddToRoleAsync(baseUser, "admin").Result;
                 }
+            }
+
+
+            var endpoints = _redisConnection.GetEndPoints();
+            var server = _redisConnection.GetServer(endpoints.First());
+            var test =  server.Keys().ToList();
+
+            foreach (var item in test)
+            {
+                 await _cache.RemoveAsync(item.ToString());
             }
         }
     }

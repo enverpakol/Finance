@@ -2,7 +2,7 @@
 
 namespace Finance.Application.Repositories
 {
-    public interface IStockRepository : IRepository<Stock>
+    public interface IStockRepository : IRedisCacheRepository<Stock>
     {
         Task<bool> SetBalance(int id, decimal quantity);
     }

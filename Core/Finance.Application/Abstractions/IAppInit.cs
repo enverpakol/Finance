@@ -2,6 +2,6 @@
 {
     public interface IAppInit
     {
-        public void Init();
+        public Task InitAsync();
     }
 }

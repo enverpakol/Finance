@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Finance.Application;
 using Finance.Application.Abstractions;
 using Finance.Application.Validators;
@@ -7,6 +8,7 @@ using Finance.Persistence;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -27,6 +29,13 @@ builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>
           opts.JsonSerializerOptions.Converters.Add(enumConverter);
       });
 
+
+builder.Services.AddStackExchangeRedisCache(action =>
+{
+    action.Configuration = "localhost:6379";
+});
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost:6379"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -79,7 +88,7 @@ app.MapControllers();
 using (var serviceScope = app.Services.CreateScope())
 {
     var context = serviceScope.ServiceProvider.GetService<IAppInit>();
-    context.Init();
+    context.InitAsync();
 
 
 }
