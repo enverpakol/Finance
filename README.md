@@ -1,4 +1,25 @@
-﻿# GFinance Uygulaması Kullanım Kılavuzu
+﻿
+## Kurulum
+
+GFinance uygulamasını kullanabilmek için aşağıdaki kurulum adımlarını takip edin:
+
+### 1. MySQL Sunucusu
+- GFinance uygulaması, veritabanı için bir MySQL sunucusuna ihtiyaç duyar.
+- Yerel bir MySQL sunucusu kullanıyorsanız, MySQL'in yüklü olduğundan ve çalıştığından emin olun.
+- Eğer MySQL sunucusu kurulu değilse, bir MySQL sunucusu kurmanız gerekebilir.
+
+### 2. Redis Sunucusu
+- GFinance uygulaması, oturum yönetimi ve önbellekleme için bir Redis sunucusuna ihtiyaç duyar.
+- Yerel bir Redis sunucusu kullanıyorsanız, Redis'in yüklü olduğundan ve çalıştığından emin olun.
+- Eğer Redis sunucusu kurulu değilse, bir Redis sunucusu kurmanız gerekebilir.
+
+### 3. Bağlantı Bilgileri
+- GFinance uygulamasının MySQL ve Redis sunucusuna bağlanabilmesi için `appsettings.json` dosyasındaki bağlantı bilgilerini düzenlemeniz gerekmektedir.
+- `appsettings.json` dosyasını açın ve MySQL ve Redis bağlantı bilgilerini güncelleyin.
+
+
+
+# GFinance Uygulaması Kullanım Kılavuzu
 
 GFinance uygulamasını kullanmak için aşağıdaki adımları izleyebilirsiniz:
 
