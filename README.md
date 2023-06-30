@@ -1,4 +1,12 @@
-﻿
+﻿## Açıklama
+Bu proje, stok yönetimi, cari hesaplar ve faturalar gibi işlemleri etkin bir şekilde yönetmeyi amaçlayan bir finansal yönetim uygulamasıdır. Bu sayede işletmenin stoklarını takip etmesi, cari hesapları yönetmesi ve fatura oluşturma işlemlerini kolaylıkla gerçekleştirmesi sağlanır. Projenin temel amacı, finansal işlemleri verimli bir şekilde yöneterek işletmenin finansal süreçlerini optimize etmektir.
+
+
+
+
+
+
+
 ## Kurulum
 
 GFinance uygulamasını kullanabilmek için aşağıdaki kurulum adımlarını takip edin:
