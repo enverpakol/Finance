@@ -43,17 +43,12 @@ namespace Finance.API.Controllers
             if (!result.Succeeded)
                 throw new ClientSideException("Kullanıcı adı veya şifre hatalı !");
 
-
-
             var tokenInfo = _tokenHandler.CreateAccessToken(100, user.Id);
             tokenInfo.FirstName = user.FirstName;
             tokenInfo.Email = user.Email;
             tokenInfo.LastName = user.LastName;
 
-
             return CreateActionResult(ResponseDto<Token>.Success(HttpStatusCode.OK, tokenInfo));
         }
-
-
     }
 }

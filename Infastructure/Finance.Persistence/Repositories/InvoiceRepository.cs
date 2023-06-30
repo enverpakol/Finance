@@ -26,7 +26,15 @@ namespace Finance.Persistence.Repositories
         }
 
 
+        public override IQueryable<Invoice> GetList(Expression<Func<Invoice, bool>> filter = null)
+        {
+            var activeUser= _userRepository.GetActiveUser().Result;
+            var query = base.GetList(filter)
+                .Include(x=>x.Customer)
+                .Where(x=>x.Customer.CompanyId==activeUser.CompanyId);
 
+            return query;
+        }
 
         public override async Task<bool> CreateAsync(Invoice item)
         {

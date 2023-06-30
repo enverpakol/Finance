@@ -10,7 +10,7 @@ namespace Finance.Application.Utils.Extensions
 {
     public static class ValidationExtension
     {
-        //public static IRuleBuilder<T, int> CheckClientIsMine<T>(this IRuleBuilder<T, int> ruleBuilder, IAppUserRepository repo, string language = "en")
+        //public static IRuleBuilder<T, int> CheckClientIsMine<T>(this IRuleBuilder<T, int> ruleBuilder)
         //{
         //    var options = ruleBuilder
         //        .NotNull()

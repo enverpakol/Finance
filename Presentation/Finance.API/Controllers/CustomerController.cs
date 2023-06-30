@@ -32,7 +32,7 @@ namespace Finance.API.Controllers
         public async Task<IActionResult> List([FromQuery] ListRequestDto p)
         {
             var list = await _repo.GetListFromCacheAsync();
-            var filteredList = list.ToDynamicWhereAndOrder(p);
+            var filteredList = list.ToDynamicOrder(p.OrderField, p.OrderDir);
 
             var test = PagerUtils<Customer, CustomerDto>.SetAsync(filteredList, _mapper, p.PageIndex, p.PageSize);
             return CreateActionResult(PagerResponseDto<CustomerDto>.Success(HttpStatusCode.OK, test.Items, test.ItemsInfo, 1));

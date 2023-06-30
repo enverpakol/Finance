@@ -11,34 +11,22 @@ namespace Finance.Application.Utils.Extensions
             var data = service.Result;
             return data.Select(x => x.Id).ToList();
         }
-        public static IQueryable<T> ToDynamicWhereAndOrder<T>(this IQueryable<T> query, ListRequestDto p,
-               string defaultField = "Name", string defaultDir = "ASC")
+        public static IQueryable<T> ToDynamicOrder<T>(this IQueryable<T> query, string field = null, string direction = null)
                where T : class
         {
-
-            //if (!(p.Filter != null))
-            //    query = query.Where(p.Filter);
-
-            if (!(p.OrderDir.IsEmpty()) && !(p.OrderField.IsEmpty()))
-                query = query.OrderBy(p.OrderField + " " + p.OrderDir);
-            else
-                query = query.OrderBy(defaultField + " " + defaultDir);
+            if (!(field.IsEmpty()) && !(direction.IsEmpty()))
+                query = query.OrderBy(field + " " + direction);
             return query;
         }
 
-        public static List<T> ToDynamicWhereAndOrder<T>(this List<T> list, ListRequestDto p,
-              string defaultField = "Name", string defaultDir = "ASC")
+        public static List<T> ToDynamicOrder<T>(this List<T> list,string field = null, string direction = null)
               where T : class
         {
-
             var query=list.AsQueryable();
-            //if (!(p.Filter != null))
-            //    query = query.Where(p.Filter);
 
-            if (!(p.OrderDir.IsEmpty()) && !(p.OrderField.IsEmpty()))
-                query = query.OrderBy(p.OrderField + " " + p.OrderDir);
-            else
-                query = query.OrderBy(defaultField + " " + defaultDir);
+            if (!(field.IsEmpty()) && !(direction.IsEmpty()))
+                query = query.OrderBy(field+ " " + direction);
+
             return query.ToList();
         }
     }

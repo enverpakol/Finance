@@ -31,7 +31,7 @@ namespace Finance.API.Controllers
         [HttpGet]
         public async Task<IActionResult> List([FromQuery] ListRequestDto p)
         {
-            var query = _repo.GetList().ToDynamicWhereAndOrder(p);
+            var query = _repo.GetList().ToDynamicOrder(p.OrderField, p.OrderDir);
 
             var test = await PagerUtils<PaymentTransaction, PaymentTransactionDto>.SetAsync(query, _mapper, p.PageIndex, p.PageSize);
             return CreateActionResult(PagerResponseDto<PaymentTransactionDto>.Success(HttpStatusCode.OK, test.Items, test.ItemsInfo, 1));

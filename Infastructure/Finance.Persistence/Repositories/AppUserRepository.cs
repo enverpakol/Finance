@@ -44,7 +44,7 @@ namespace Finance.Persistence.Repositories
             var adminIds = _userManager.GetUsersInRoleAsync("admin").GetOnlyIdList();
             var query = Context.AppUsers
                         .Where(x => adminIds.Contains(x.Id))
-                          .ToDynamicWhereAndOrder(p)
+                          .ToDynamicOrder(p.OrderField, p.OrderDir)
                       .AsNoTracking();
 
             return await PagerUtils<AppUser, AdminListItemDto>.SetAsync(query, _mapper, p.PageIndex, p.PageSize);

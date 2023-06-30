@@ -25,12 +25,12 @@ namespace Finance.API.Controllers
         [HttpPost]
         public async Task<IActionResult> List(ListRequestDto p)
         {
-            var query = _repo.GetList().ToDynamicWhereAndOrder(p);
+            var query = _repo.GetList().ToDynamicOrder(p.OrderField, p.OrderDir);
 
             var test = await PagerUtils<Company, CompanyDto>.SetAsync(query, _mapper, p.PageIndex, p.PageSize);
             return CreateActionResult(PagerResponseDto<CompanyDto>.Success(HttpStatusCode.OK, test.Items, test.ItemsInfo, 1));
         }
-
+            
         [HttpPost]
         public async Task<IActionResult> Create(CompanyDto model)
         {
