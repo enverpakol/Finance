@@ -1,5 +1,6 @@
 using AutoMapper;
 using Finance.Application.Dtos;
+using Finance.Application.Dtos.FilterDtos;
 using Finance.Application.Repositories;
 using Finance.Application.Utils;
 using Finance.Application.Utils.Extensions;
@@ -29,10 +30,15 @@ namespace Finance.API.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> List([FromQuery] ListRequestDto p)
+        public async Task<IActionResult> List([FromQuery] CustomerFilterDto p)
         {
             var list = await _repo.GetListFromCacheAsync();
-            var filteredList = list.ToDynamicOrder(p.OrderField, p.OrderDir);
+            var filteredList = list
+                .Where(x=>
+                (p.Name==null || x.Name.ToLowerInvariant().Contains(p.Name.ToLowerInvariant()))
+                &&(p.TaxOffice==null || x.TaxOffice.Contains(p.TaxOffice))
+                &&(p.TaxNumber==null || x.TaxNumber.Contains(p.TaxNumber))
+                ).ToList().ToDynamicOrder(p.OrderField, p.OrderDir);
 
             var test = PagerUtils<Customer, CustomerDto>.SetAsync(filteredList, _mapper, p.PageIndex, p.PageSize);
             return CreateActionResult(PagerResponseDto<CustomerDto>.Success(HttpStatusCode.OK, test.Items, test.ItemsInfo, 1));
