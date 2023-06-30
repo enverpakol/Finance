@@ -16,6 +16,8 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Finance.Application.Helpers;
 using Finance.Persistence.Contexts;
 using System.Security.Cryptography;
+using Finance.Application.Exceptions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Finance.Persistence.Repositories
 {
@@ -55,7 +57,8 @@ namespace Finance.Persistence.Repositories
                     var existingItem = itemList.AsQueryable().Where($"Id=={_id}").FirstOrDefault();
                     if (existingItem != null)
                     {
-                        existingItem = item;
+                        itemList.Remove(existingItem);
+                        itemList.Add(item);
                         await UpdateCacheListAsync(itemList);
                     }
                 }
@@ -136,6 +139,18 @@ namespace Finance.Persistence.Repositories
         {
             await _cache.RemoveAsync(typeof(T).Name);
             return true;
+        }
+
+
+        public async Task<T> GetFromCacheAsync(int id)
+        {
+            var itemList = await GetListFromCacheAsync();
+            var item = itemList.AsQueryable().Where($"Id=={id}").FirstOrDefault();
+            
+            if (item == null)
+                throw new NotFoundException($"{typeof(T).Name} Id: {id} not found !");
+
+            return item;
         }
     }
 }

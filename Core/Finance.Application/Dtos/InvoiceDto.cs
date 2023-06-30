@@ -10,8 +10,9 @@ namespace Finance.Application.Dtos
     {
         public int Id { get; set; }
         public string No { get; set; }
-        public int ClientId { get; set; }
-        public string ClientName { get; set; }
+        public int CustomerId { get; set; }
+        public string CustomerName { get; set; }
+        public string CompanyName { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal TotalAmount { get; set; }

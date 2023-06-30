@@ -12,8 +12,8 @@ namespace Finance.Application.Dtos
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }
 
-        public int ClientId { get; set; }
-        public string ClientName { get; set; }
+        public int CustomerId { get; set; }
+        public string CustomerName { get; set; }
 
 
 

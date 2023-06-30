@@ -29,9 +29,12 @@ namespace Finance.Persistence.Repositories
         }
         public virtual async Task<T> GetItemAsync(int id)
         {
-            return await Table.FindAsync(id);
+            var data = await Table.FindAsync(id);
+            if (data == null)
+                throw new NotFoundException($"{typeof(T).Name} Id: {id} not found !");
+            return data;
         }
-
+           
 
         public virtual bool ValidateItem(T item)
         {

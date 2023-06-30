@@ -34,6 +34,8 @@ namespace Finance.Persistence
             services.AddScoped<IAppUserRepository, AppUserRepository>();
 
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+
             services.AddScoped<IStockRepository, StockRepository>();
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<IStockTransactionRepository, StockTransactionRepository>();

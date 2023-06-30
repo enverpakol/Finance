@@ -17,7 +17,8 @@ namespace Finance.Persistence.Contexts
         public DbSet<AppRole> AppRole { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<Stock> Stocks { get; set; }
-
+        public DbSet<Customer> Customers { get; set; }
+        
 
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
@@ -50,9 +51,9 @@ namespace Finance.Persistence.Contexts
             base.OnModelCreating(builder);
 
             builder.Entity<Invoice>()
-             .HasOne(d => d.Client)
+             .HasOne(d => d.Customer)
              .WithMany(d => d.Invoices)
-             .HasForeignKey(d => d.ClientId)
+             .HasForeignKey(d => d.CustomerId)
              .IsRequired(true)
              .OnDelete(DeleteBehavior.Restrict);
 

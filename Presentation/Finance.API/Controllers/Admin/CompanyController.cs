@@ -49,7 +49,7 @@ namespace Finance.API.Controllers
             return CreateActionResult(ResponseDto<NoContentDto>.Success(HttpStatusCode.OK, item.Id));
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> Item(int id)
         {

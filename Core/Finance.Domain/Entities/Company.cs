@@ -10,5 +10,6 @@ namespace Finance.Domain.Entities
         public string PhoneNumber { get; set; }
             
         public ICollection<Stock> Stocks { get; set; }
+        public ICollection<Customer> Customers { get; set; }
     }
 }

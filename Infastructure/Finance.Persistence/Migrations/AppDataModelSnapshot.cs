@@ -48,6 +48,40 @@ namespace Finance.Persistence.Migrations
                     b.ToTable("Companies");
                 });
 
+            modelBuilder.Entity("Finance.Domain.Entities.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("BalanceDebt")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TaxNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TaxOffice")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Customers");
+                });
+
             modelBuilder.Entity("Finance.Domain.Entities.Identity.AppRole", b =>
                 {
                     b.Property<int>("Id")
@@ -83,9 +117,6 @@ namespace Finance.Persistence.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("BalanceDebt")
-                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<int?>("CompanyId")
                         .HasColumnType("int");
@@ -160,11 +191,11 @@ namespace Finance.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<int>("InvoicePaymentEnum")
                         .HasColumnType("int");
@@ -180,7 +211,7 @@ namespace Finance.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Invoices");
                 });
@@ -227,11 +258,11 @@ namespace Finance.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("InvoiceId")
                         .HasColumnType("int");
@@ -244,7 +275,7 @@ namespace Finance.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("InvoiceId");
 
@@ -414,6 +445,17 @@ namespace Finance.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Finance.Domain.Entities.Customer", b =>
+                {
+                    b.HasOne("Finance.Domain.Entities.Company", "Company")
+                        .WithMany("Customers")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("Finance.Domain.Entities.Identity.AppUser", b =>
                 {
                     b.HasOne("Finance.Domain.Entities.Company", "Company")
@@ -425,13 +467,13 @@ namespace Finance.Persistence.Migrations
 
             modelBuilder.Entity("Finance.Domain.Entities.Invoice", b =>
                 {
-                    b.HasOne("Finance.Domain.Entities.Identity.AppUser", "Client")
+                    b.HasOne("Finance.Domain.Entities.Customer", "Customer")
                         .WithMany("Invoices")
-                        .HasForeignKey("ClientId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Client");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Finance.Domain.Entities.InvoiceDetail", b =>
@@ -455,9 +497,9 @@ namespace Finance.Persistence.Migrations
 
             modelBuilder.Entity("Finance.Domain.Entities.PaymentTransaction", b =>
                 {
-                    b.HasOne("Finance.Domain.Entities.Identity.AppUser", "Client")
+                    b.HasOne("Finance.Domain.Entities.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("ClientId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -465,7 +507,7 @@ namespace Finance.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("InvoiceId");
 
-                    b.Navigation("Client");
+                    b.Navigation("Customer");
 
                     b.Navigation("Invoice");
                 });
@@ -551,10 +593,12 @@ namespace Finance.Persistence.Migrations
 
             modelBuilder.Entity("Finance.Domain.Entities.Company", b =>
                 {
+                    b.Navigation("Customers");
+
                     b.Navigation("Stocks");
                 });
 
-            modelBuilder.Entity("Finance.Domain.Entities.Identity.AppUser", b =>
+            modelBuilder.Entity("Finance.Domain.Entities.Customer", b =>
                 {
                     b.Navigation("Invoices");
                 });

@@ -10,13 +10,8 @@ namespace Finance.Domain.Entities
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }
 
-        public int ClientId { get; set; }
-
-        [ForeignKey(nameof(ClientId))]
-        public AppUser Client { get; set; }
-
-
-
+        public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
 
 
         public int? InvoiceId { get; set; }

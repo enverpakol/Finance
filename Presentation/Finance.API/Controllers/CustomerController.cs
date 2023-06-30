@@ -13,13 +13,13 @@ using System.Net;
 
 namespace Finance.API.Controllers
 {
-    public class StockTransactionController : UserBaseController
+    public class CustomerController : UserBaseController
     {
-        private readonly IStockTransactionRepository _repo;
+        private readonly ICustomerRepository _repo;
         private readonly IAppUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
-        public StockTransactionController(IStockTransactionRepository repo, IMapper mapper, UserManager<AppUser> userManager, IAppUserRepository userRepository)
+        public CustomerController(ICustomerRepository repo, IMapper mapper, UserManager<AppUser> userManager, IAppUserRepository userRepository)
         {
             _repo = repo;
             _mapper = mapper;
@@ -31,24 +31,25 @@ namespace Finance.API.Controllers
         [HttpGet]
         public async Task<IActionResult> List([FromQuery] ListRequestDto p)
         {
-            var query = _repo.GetList().ToDynamicWhereAndOrder(p);
+            var list = await _repo.GetListFromCacheAsync();
+            var filteredList = list.ToDynamicWhereAndOrder(p);
 
-            var test = await PagerUtils<StockTransaction, StockTransactionDto>.SetAsync(query, _mapper, p.PageIndex, p.PageSize);
-            return CreateActionResult(PagerResponseDto<StockTransactionDto>.Success(HttpStatusCode.OK, test.Items, test.ItemsInfo, 1));
+            var test = PagerUtils<Customer, CustomerDto>.SetAsync(filteredList, _mapper, p.PageIndex, p.PageSize);
+            return CreateActionResult(PagerResponseDto<CustomerDto>.Success(HttpStatusCode.OK, test.Items, test.ItemsInfo, 1));
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Create(StockTransactionDto model)
+        public async Task<IActionResult> Create(CustomerDto model)
         {
-            var item = _mapper.Map<StockTransaction>(model);
+            var item = _mapper.Map<Customer>(model);
             var result = await _repo.CreateAsync(item);
             return CreateActionResult(ResponseDto<NoContentDto>.Success(HttpStatusCode.OK, item.Id));
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(StockTransactionDto model)
+        public async Task<IActionResult> Edit(CustomerDto model)
         {
             var item = await _repo.GetItemAsync(model.Id);
             _mapper.Map(model, item);
@@ -61,9 +62,9 @@ namespace Finance.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Item(int id)
         {
-            var result = await _repo.GetItemAsync(id);
-            var item = _mapper.Map<StockTransactionDto>(result);
-            return CreateActionResult(ResponseDto<StockTransactionDto>.Success(HttpStatusCode.OK, item));
+            var result = await _repo.GetFromCacheAsync(id);
+            var item = _mapper.Map<CustomerDto>(result);
+            return CreateActionResult(ResponseDto<CustomerDto>.Success(HttpStatusCode.OK, item));
         }
     }
 }

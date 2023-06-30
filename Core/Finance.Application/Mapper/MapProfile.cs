@@ -39,6 +39,12 @@ namespace Finance.Application.Mapper
             CreateMap<Company, CompanyDto>().ReverseMap();
             CreateMap<Stock, StockDto>().ReverseMap();
 
+            CreateMap<CustomerDto, Customer>()
+                 .ForMember(x => x.Company, options => options.Ignore())
+                 .ForMember(x => x.BalanceDebt, options => options.Ignore())
+                 .ForMember(x => x.CompanyId, options => options.Ignore());
+
+            CreateMap<Customer, CustomerDto>();
 
             CreateMap<StockTransaction, StockTransactionDto>();
 
@@ -49,7 +55,7 @@ namespace Finance.Application.Mapper
             CreateMap<PaymentTransaction, PaymentTransactionDto>();
 
             CreateMap<PaymentTransactionDto, PaymentTransaction>()
-                .ForMember(x => x.Client, options => options.Ignore())
+                .ForMember(x => x.Customer, options => options.Ignore())
                 .ForMember(x => x.Invoice, options => options.Ignore());
 
 
@@ -72,7 +78,8 @@ namespace Finance.Application.Mapper
 
 
             CreateMap<Invoice, InvoiceDto>()
-                .ForMember(x => x.ClientName, g => g.MapFrom(x => x.Client.Name))
+                .ForMember(x => x.CustomerName, g => g.MapFrom(x => x.Customer.Name))
+                .ForMember(x => x.CompanyName, g => g.MapFrom(x => x.Customer.Company.Name))
                 .ForMember(x => x.Details, opt => opt.MapFrom(x => x.InvoiceDetails.Select(g => new InvoiceDetailDto
                 {
                     Price = g.Price,

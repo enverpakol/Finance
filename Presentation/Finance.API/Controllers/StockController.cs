@@ -28,8 +28,8 @@ namespace Finance.API.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<IActionResult> List(ListRequestDto p)
+        [HttpGet]
+        public async Task<IActionResult> List([FromQuery]ListRequestDto p)
         {
             var list = await _repo.GetListFromCacheAsync();
             var filteredList = list.ToDynamicWhereAndOrder(p);
@@ -58,11 +58,11 @@ namespace Finance.API.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> Item(int id)
         {
-            var result = await _repo.GetItemAsync(id);
+            var result = await _repo.GetFromCacheAsync(id);
             var item = _mapper.Map<StockDto>(result);
             return CreateActionResult(ResponseDto<StockDto>.Success(HttpStatusCode.OK, item));
         }

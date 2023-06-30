@@ -20,8 +20,10 @@ namespace Finance.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> List(ListRequestDtoById postModel)
+
+
+        [HttpGet]
+        public async Task<IActionResult> List([FromQuery] ListRequestDtoById postModel)
         {
             var model = await _appUserRepository.GetUserList(postModel);
             return CreateActionResult(PagerResponseDto<UserDto>.Success(HttpStatusCode.OK, model.Items, model.ItemsInfo));
@@ -43,7 +45,7 @@ namespace Finance.API.Controllers
             return CreateActionResult(ResponseDto<NoContentDto>.Success(HttpStatusCode.OK));
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> Item(int id)
         {

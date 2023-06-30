@@ -7,9 +7,11 @@ namespace Finance.Application.Validators
     public class PaymentTransactionDtoValidator : AbstractValidator<PaymentTransactionDto>
     {
         private readonly IAppUserRepository _repoAppUser;
-        public PaymentTransactionDtoValidator(IAppUserRepository repoAppUser)
+        private readonly ICustomerRepository _repoCustomer;
+        public PaymentTransactionDtoValidator(IAppUserRepository repoAppUser, ICustomerRepository repoCustomer)
         {
             _repoAppUser = repoAppUser;
+            _repoCustomer = repoCustomer;
 
             RuleFor(x => x.Price)
               .NotNull()
@@ -17,7 +19,7 @@ namespace Finance.Application.Validators
               .NotEmpty();
 
 
-            RuleFor(x => x.ClientId)
+            RuleFor(x => x.CustomerId)
               .NotEmpty()
               .NotNull()
               .Must(ValidateClient).WithMessage("2");
@@ -26,11 +28,12 @@ namespace Finance.Application.Validators
         private bool ValidateClient(int clientId)
         {
             var activeUser = _repoAppUser.GetActiveUser().Result;
-            var clientUser = _repoAppUser.GetItemAsync(clientId).Result;
-            if (activeUser.CompanyId != clientUser.CompanyId)
+            var customer = _repoCustomer.GetItemAsync(clientId).Result;
+            if (activeUser.CompanyId != customer.CompanyId)
             {
                 return false;
             }
+
             return true;
         }
     }

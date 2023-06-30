@@ -9,12 +9,13 @@ namespace Finance.Domain.Entities
     public class Invoice : BaseEntity
     {
         public string No { get; set; }
-        public int ClientId { get; set; }
-        [ForeignKey(nameof(ClientId))]
-        public AppUser Client { get; set; }
+        public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal TotalAmount { get; set; }
+
+
 
         public InvoicePaymentEnum InvoicePaymentEnum { get; set; }
         public ICollection<InvoiceDetail> InvoiceDetails { get; set; }

@@ -12,17 +12,6 @@ namespace Finance.Domain.Entities.Identity
         public Company Company { get; set; }
 
 
-
-
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal BalanceDebt { get; set; }
-
-
-        
-        public ICollection<Invoice> Invoices { get; set; }
-
-
-
         public string Name => $"{FirstName} {LastName}";
     }
 }

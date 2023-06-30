@@ -1,4 +1,5 @@
-﻿using Finance.Application.Repositories;
+﻿using Finance.Application.Exceptions;
+using Finance.Application.Repositories;
 using Finance.Domain.Entities;
 using Finance.Domain.Entities.Enums;
 using Finance.Domain.Entities.Identity;
@@ -34,6 +35,8 @@ namespace Finance.Persistence.Repositories
             foreach (var detail in item.InvoiceDetails)
             {
                 var stock = await _stockRepository.GetItemAsync(detail.StockId);
+                if (stock == null)
+                    throw new NotFoundException($"stock {detail.Id}");
                 detail.UnitPrice = stock.Price;
                 detail.Price = stock.Price * detail.Quantity;
             }
@@ -56,12 +59,11 @@ namespace Finance.Persistence.Repositories
             {
                 _ = await _paymentTransactionRepository.CreateAsync(new()
                 {
-                    ClientId = item.ClientId,
+                    CustomerId = item.CustomerId,
                     Price = item.TotalAmount * -1,
                     InvoiceId = item.Id,
                 });
             }
-
             return result;
         }
 
@@ -81,7 +83,7 @@ namespace Finance.Persistence.Repositories
         public override Task<Invoice> GetItemAsync(int id)
         {
             return Table
-                .Include(x => x.Client)
+                .Include(x => x.Customer).ThenInclude(x=>x.Company)
                 .Include(x => x.InvoiceDetails).ThenInclude(x => x.Stock)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }

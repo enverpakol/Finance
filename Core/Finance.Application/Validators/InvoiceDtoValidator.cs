@@ -8,15 +8,17 @@ namespace Finance.Application.Validators
 {
     public class InvoiceDtoValidator : AbstractValidator<InvoiceDto>
     {
+        private readonly ICustomerRepository _repoCustomer;
         private readonly IAppUserRepository _repoAppUser;
         private readonly UserManager<AppUser> _userManager;
-        public InvoiceDtoValidator(IAppUserRepository repoAppUser, UserManager<AppUser> userManager)
+        public InvoiceDtoValidator(UserManager<AppUser> userManager, ICustomerRepository repoCustomer, IAppUserRepository repoAppUser)
         {
-            _repoAppUser = repoAppUser;
             _userManager = userManager;
+            _repoCustomer = repoCustomer;
+            _repoAppUser = repoAppUser;
 
 
-            RuleFor(x => x.ClientId)
+            RuleFor(x => x.CustomerId)
               .NotEmpty()
               .Must(ValidateClient).WithMessage("2");
 
@@ -24,17 +26,12 @@ namespace Finance.Application.Validators
              .NotNull();
         }
 
-        private bool ValidateClient(int clientId)
+        private bool ValidateClient(int customerId)
         {
             var activeUser = _repoAppUser.GetActiveUser().Result;
-            var clientUser = _repoAppUser.GetItemAsync(clientId).Result;
-            if (activeUser.CompanyId != clientUser.CompanyId)
+            var customer = _repoCustomer.GetItemAsync(customerId).Result;
+            if (activeUser.CompanyId != customer.CompanyId)
                 return false;
-
-            if (_userManager.IsInRoleAsync(clientUser, "client").Result == false)
-                return false;
-
-
 
             return true;
         }

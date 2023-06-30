@@ -21,15 +21,13 @@ namespace Finance.API.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IMapper _mapper;
         private readonly ITokenHandler _tokenHandler;
-        private IHostingEnvironment Environment;
         private readonly AppData _clientContext;
-        public LoginController(UserManager<AppUser> userManager, IMapper mapper, SignInManager<AppUser> signInManager, ITokenHandler tokenHandler, IHostingEnvironment environment, AppData data)
+        public LoginController(UserManager<AppUser> userManager, IMapper mapper, SignInManager<AppUser> signInManager, ITokenHandler tokenHandler, AppData data)
         {
             _userManager = userManager;
             _mapper = mapper;
             _signInManager = signInManager;
             _tokenHandler = tokenHandler;
-            Environment = environment;
             _clientContext = data;
         }
 
