@@ -32,6 +32,7 @@ GFinance uygulamasını kullanabilmek için aşağıdaki kurulum adımlarını t
 GFinance uygulamasını kullanmak için aşağıdaki adımları izleyebilirsiniz:
 
 ## 1. Admin Hesabı ve Token Alma
+- Initialize admin hesabı, Username: admin@test.com Password:123456
 - Postman API koleksiyonunu kullanarak, admin hesabı bilgileriyle login endpointine istek gönderin ve bir token alın.
 
 ## 2. Firma Bilgileri ve Kullanıcı Hesapları

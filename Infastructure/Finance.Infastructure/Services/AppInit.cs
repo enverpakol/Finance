@@ -65,19 +65,18 @@ namespace Finance.Infastructure.Services
                 }).Result;
             }
 
-            var baseUser = _userManager.FindByNameAsync("epakol12@gmail.com").Result;
+            var baseUser = _userManager.FindByNameAsync("admin@test.com").Result;
             if (baseUser == null)
             {
                 var user = new AppUser()
                 {
-                    UserName = "epakol12@gmail.com",
-                    Email = "epakol12@gmail.com",
-                    FirstName = "Enver",
-                    LastName = "Pakol",
+                    UserName = "admin@test.com",
+                    Email = "admin@test.com",
+                    FirstName = "Admin",
+                    LastName = "Test",
                 };
                 var result = _userManager.CreateAsync(user, "123456").Result;
-
-
+                var roleResult = _userManager.AddToRoleAsync(user, "admin").Result;
             }
             else
             {
