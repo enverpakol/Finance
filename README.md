@@ -1,8 +1,8 @@
 ﻿## Açıklama
-Bu proje, stok yönetimi, cari hesaplar ve faturalar gibi işlemleri etkin bir şekilde yönetmeyi amaçlayan bir finansal yönetim uygulamasıdır. Bu sayede işletmenin stoklarını takip etmesi, cari hesapları yönetmesi ve fatura oluşturma işlemlerini kolaylıkla gerçekleştirmesi sağlanır. Projenin temel amacı, finansal işlemleri verimli bir şekilde yöneterek işletmenin finansal süreçlerini optimize etmektir.
-
-
-
+- Bu projede 2 farklı rol bulunmaktadır. Admin rolü ile ilgili şirket bilgileri ve şirkete ait kullanıcı bilgileri oluşturulabilir. 
+- Şirket kullanıcısı rolü ile şirketin stok ve cari bilgileri girilebilir. Ayrıca fatura oluşturulabilir ve fatura işlemleri gerçekleştirilebilir.
+- Fatura işleminde ilgili ürünlerin stok miktarları azaltılır ve cari hesap bakiyesi güncellenir. Bu bilgiler stok ve cari tablolarında balance olarak tutulur.
+Ayrıca bu işlem hareketleri stokTransaction ve paymentTransaction tablolarında tutulur.
 
 
 
